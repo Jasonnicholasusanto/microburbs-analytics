@@ -8,7 +8,7 @@ def get_suburb_latest_median_price(suburb: str) -> str:
     if suburb is None:
         return "N/A"
     
-    market_insights = fetch_suburb_market_insights(suburb)
+    market_insights = fetch_suburb_market_insights(suburb, )
     # 1. Flatten the nested results
     records = market_insights["results"][0]        # first (and only) list of time series
     df = pd.DataFrame(records)
@@ -54,3 +54,23 @@ def get_suburb_recent_growth(suburb: str) -> str | None:
     except Exception:
         return None
 
+def get_suburb_rental_yield(suburb: str):
+    # --- 1. Get median sell price ---
+    market_insights = fetch_suburb_market_insights(suburb, metric="price")
+    sell_price = pd.DataFrame(market_insights["results"][0])
+    sell_price["date"] = pd.to_datetime(sell_price["date"])
+    sell_price = sell_price.sort_values("date")
+    latest_price = sell_price["value"].iloc[-1]
+
+    # --- 2. Get median rent ---
+    market_insights = fetch_suburb_market_insights(suburb, metric="rent")
+    rent_price = pd.DataFrame(market_insights["results"][0])
+    rent_price["date"] = pd.to_datetime(rent_price["date"])
+    rent_price = rent_price.sort_values("date")
+    latest_rent = rent_price["value"].iloc[-1]
+
+    # --- 3. Compute rental yield ---
+    annual_rent = latest_rent * 52
+    rental_yield = (annual_rent / latest_price) * 100
+
+    return f"{rental_yield:,.2f}%", latest_price, latest_rent

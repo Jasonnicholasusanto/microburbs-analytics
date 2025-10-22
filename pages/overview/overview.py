@@ -84,7 +84,7 @@ layout = dcc.Loading(
                                 dmc.Paper(
                                     dmc.Stack([
                                         dmc.Text("Gross Rental Yield", fw=500, c="dimmed"),
-                                        dmc.Text("4.6%", fw=700, size="xl", c="blue"),
+                                        dmc.Text("", id="rental-yield-suburb-overview", fw=700, size="xl", c="blue"),
                                     ]),
                                     withBorder=True,
                                     shadow="sm",
