@@ -1,0 +1,11 @@
+from callbacks.app.app_callbacks import register_app_callbacks
+from callbacks.overview.overview_callbacks import register_overview_callbacks
+from models.callback_manager.callback_manager import CallbackManager
+from models.environment_manager.environment_manager import EnvironmentManager
+
+
+callback_manager = CallbackManager()
+environment_manager = EnvironmentManager()
+
+register_app_callbacks(callback_manager)
+register_overview_callbacks(callback_manager)
